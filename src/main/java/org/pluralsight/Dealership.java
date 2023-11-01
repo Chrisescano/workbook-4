@@ -10,7 +10,10 @@ public class Dealership {
     ArrayList<Vehicle> inventory;
 
     public Dealership(String name, String address, String phone) {
-
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        inventory = new ArrayList<>();
     }
 
     public List<Vehicle> getVehiclesByPrice(double min, double max) {
@@ -42,7 +45,7 @@ public class Dealership {
     }
 
     public void addVehicle(Vehicle vehicle) {
-
+        inventory.add(vehicle);
     }
 
     public void removeVehicle(Vehicle vehicle) {
