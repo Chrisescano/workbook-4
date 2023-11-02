@@ -1,12 +1,18 @@
 package org.pluralsight;
 
+import com.adelean.inject.resources.junit.jupiter.GivenTextResource;
+import com.adelean.inject.resources.junit.jupiter.TestWithResources;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestWithResources
 class DealershipFileManagerTest {
     DealershipFileManager fileManager = new DealershipFileManager();
     Dealership dealership = fileManager.getDealership();
+
+    @GivenTextResource("testinventory.csv")
+    String testInventory;
 
     @Test
     void getDealership() {
@@ -26,15 +32,16 @@ class DealershipFileManagerTest {
         //take dealership.toString and compare to BufferedReader
         Dealership newDealership = fileManager.getDealership();
 
-        String dealershipFile = newDealership.toString();
+        String dealershipFile = newDealership.toString() + "\n";
         for(Vehicle vehicle : newDealership.getInventory()) {
-            dealershipFile += vehicle.toString();
+            dealershipFile += vehicle.toString() + "\n";
         }
 
-        assertEquals(true, dealershipFile.equals("Evie's Dealership|123 Park Avenue|123-456-7890" +
-                "10112|2020|Tesla|Model S|Car|Red|500|89000.0" +
-                "12342|2021|Tesla|Model X|Car|Black|2300|91000.0" +
-                "14673|2022|Tesla|Model 3|Car|Gold|0|130000.0" +
-                "12345|2020|Ford|Raptor|Car|Black|20|34000.0"));
+//        assertEquals(true, dealershipFile.equals("Evie's Dealership|123 Park Avenue|123-456-7890" +
+//                "10112|2020|Tesla|Model S|Car|Red|500|89000.0" +
+//                "12342|2021|Tesla|Model X|Car|Black|2300|91000.0" +
+//                "14673|2022|Tesla|Model 3|Car|Gold|0|130000.0" +
+//                "12345|2020|Ford|Raptor|Car|Black|20|34000.0"));
+        assertEquals(testInventory, dealershipFile);
     }
 }
