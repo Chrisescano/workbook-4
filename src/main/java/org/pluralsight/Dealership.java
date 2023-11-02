@@ -49,6 +49,29 @@ public class Dealership {
     }
 
     public void removeVehicle(Vehicle vehicle) {
+        inventory.remove(vehicle);
+    }
 
+    /*-----Getters-----*/
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public ArrayList<Vehicle> getInventory() {
+        return inventory;
+    }
+
+    @Override
+    public String toString() {
+        return name+"|"+address+"|"+phone;
     }
 }

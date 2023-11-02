@@ -1,16 +1,8 @@
 package org.pluralsight;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.io.*;
 
 public class DealershipFileManager {
-
-    public static void main(String[] args) {
-
-    }
 
     public Dealership getDealership() {
         Dealership dealershipFromFile = null;
@@ -48,8 +40,20 @@ public class DealershipFileManager {
     }
 
     //educated guess: a string for parameter
-    public void saveDealership(String dealership) {
-        //this could be anything
-        //but I know that it has to do with a csv file
+    public void saveDealership(Dealership dealership) {
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("inventory.csv"));
+            //save dealership info
+            bufferedWriter.write(dealership.toString()+"\n");
+
+            //save all the vehicles
+            for (Vehicle vehicle : dealership.getInventory()) {
+                bufferedWriter.write(vehicle.toString()+"\n");
+            }
+            bufferedWriter.close(); //flushes the buffer
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
