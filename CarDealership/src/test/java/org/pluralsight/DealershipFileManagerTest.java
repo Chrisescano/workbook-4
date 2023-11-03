@@ -37,11 +37,6 @@ class DealershipFileManagerTest {
             dealershipFile += vehicle.toString() + "\n";
         }
 
-//        assertEquals(true, dealershipFile.equals("Evie's Dealership|123 Park Avenue|123-456-7890" +
-//                "10112|2020|Tesla|Model S|Car|Red|500|89000.0" +
-//                "12342|2021|Tesla|Model X|Car|Black|2300|91000.0" +
-//                "14673|2022|Tesla|Model 3|Car|Gold|0|130000.0" +
-//                "12345|2020|Ford|Raptor|Car|Black|20|34000.0"));
-        assertEquals(testInventory, dealershipFile);
+        assertEquals(testInventory.replaceAll("\\r\\n","\n"), dealershipFile);
     }
 }
