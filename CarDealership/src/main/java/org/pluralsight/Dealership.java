@@ -16,28 +16,47 @@ public class Dealership {
         inventory = new ArrayList<>();
     }
 
+    public List<Vehicle> getVehiclesByVin(int vin) {
+        ArrayList<Vehicle> filteredList = new ArrayList<>(inventory);
+        filteredList.removeIf(vehicle -> vehicle.getVin() != vin);
+        return filteredList;
+    }
+
     public List<Vehicle> getVehiclesByPrice(double min, double max) {
-        return null;
+        ArrayList<Vehicle> filteredList = new ArrayList<>(inventory);
+        filteredList.removeIf(vehicle -> vehicle.getPrice() < min || vehicle.getPrice() > max);
+        return filteredList;
     }
 
     public List<Vehicle> getVehiclesByMakeModel(String make, String model) {
-        return null;
+        ArrayList<Vehicle> filteredList = new ArrayList<>(inventory);
+        filteredList.removeIf(vehicle -> !vehicle.getMake().contains(make));
+        filteredList.removeIf(vehicle -> !vehicle.getModel().contains(model));
+        return filteredList;
     }
 
     public List<Vehicle> getVehiclesByYear(int min, int max) {
-        return null;
+        ArrayList<Vehicle> filteredList = new ArrayList<>(inventory);
+        filteredList.removeIf(vehicle -> vehicle.getYear() < min || vehicle.getYear() > max);
+        return filteredList;
     }
 
     public List<Vehicle> getVehiclesByColor(String color) {
-        return null;
+        ArrayList<Vehicle> filteredList = new ArrayList<>(inventory);
+        filteredList.removeIf(vehicle -> !vehicle.getColor().contains(color));
+        return filteredList;
     }
 
     public List<Vehicle> getVehicleByMileage(int min, int max) {
-        return null;
+        ArrayList<Vehicle> filteredList = new ArrayList<>(inventory);
+        filteredList.removeIf(vehicle -> vehicle.getOdometer() < min || vehicle.getOdometer() > max);
+        return filteredList;
     }
 
     public List<Vehicle> getVehicleByType(String vehicleType) {
-        return null;
+        ArrayList<Vehicle> filteredList = new ArrayList<>(inventory);
+        filteredList.removeIf(vehicle -> !vehicle.getVehicleType().contains(vehicleType));
+        return filteredList;
     }
 
     public List<Vehicle> getAllVehicles() {

@@ -51,7 +51,6 @@ public class DealershipFileManager {
                 bufferedWriter.write(vehicle.toString()+"\n");
             }
             bufferedWriter.close(); //flushes the buffer
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -1,5 +1,6 @@
 package org.pluralsight;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,52 +17,102 @@ public class UserInterface {
 
         while (true) {
             displayMenu();
-            char command = getCharInput("Type in command:" );
+            char command = getCharInput("Type in command: ");
             switch (command) {
                 case 'D' -> processGetAllVehiclesRequest();
+                case 'P' -> processGetByPriceRequest();
+                case 'M' -> processGetByMakeModelRequest();
+                case 'Y' -> processGetByYearRequest();
+                case 'C' -> processGetByColorRequest();
+                case 'T' -> processGetByVehicleTypeRequest();
+                case 'O' -> processGetByMileage();
+                case 'A' -> processAddVehicleRequest();
+                case 'R' -> processRemoveVehicleRequest();
                 case 'X' -> { return; }
                 default -> System.out.println("Not A Valid Command, Try Again");
             }
         }
     }
 
-    public void processGetByPriceRequest() {
-
-    }
-
-    public void processGetByMakeModelRequest() {
-
-    }
-
-    public void processGetByYearRequest() {
-
-    }
-
-    public void processGetByColorRequest() {
-
-    }
-
-    public void processGetByMileage() {
-
-    }
-
-    public void processGetByVehicleTypeRequest() {
-
-    }
-
-    public void processGetAllVehiclesRequest() {
+    /*-----Private Methods-----*/
+    private void processGetAllVehiclesRequest() {
         displayVehicles(dealership.getAllVehicles());
     }
 
-    public void processAddVehicleRequest() {
-
+    private void processGetByPriceRequest() {
+        System.out.println("==========[ Price Search ]==========");
+        double min = getDoubleInput("Enter Minimum Price: ");
+        double max = getDoubleInput("Enter Maximum Price: ");
+        displayVehicles(dealership.getVehiclesByPrice(min, max));
     }
 
-    public void processRemoveVehicleRequest() {
-
+    private void processGetByMakeModelRequest() {
+        System.out.println("==========[ Make/Model Search ]==========");
+        String make = getStringInput("Enter Make: ");
+        String model = getStringInput("Enter Model: ");
+        displayVehicles(dealership.getVehiclesByMakeModel(make, model));
     }
 
-    /*-----Private Methods-----*/
+    private void processGetByYearRequest() {
+        System.out.println("==========[ Year Search ]==========");
+        int min = getIntInput("Enter Minimum Year: ");
+        int max = getIntInput("Enter Maximum Year: ");
+        displayVehicles(dealership.getVehiclesByYear(min, max));
+    }
+
+    private void processGetByColorRequest() {
+        System.out.println("==========[ Color Search ]==========");
+        String color = getStringInput("Enter Color Value: ");
+        displayVehicles(dealership.getVehiclesByColor(color));
+    }
+
+    private void processGetByVehicleTypeRequest() {
+        System.out.println("==========[ Vehicle Type Search ]==========");
+        String vehicleType = getStringInput("Enter Vehicle Type: ");
+        displayVehicles(dealership.getVehicleByType(vehicleType));
+    }
+
+    private void processGetByMileage() {
+        System.out.println("==========[ Mileage Search ]==========");
+        int min = getIntInput("Enter Minimum Mileage: ");
+        int max = getIntInput("Enter Maximum Mileage: ");
+        displayVehicles(dealership.getVehicleByMileage(min, max));
+    }
+
+    private void processAddVehicleRequest() {
+        System.out.println("==========[ Add Vehicle ]==========");
+        int vin = getIntInput("Enter Vehicle Vin (5-digit): ");
+        int year = getIntInput("Enter Vehicle Year: ");
+        String make = getStringInput("Enter Vehicle Make: ");
+        String model = getStringInput("Enter Vehicle Model: ");
+        String vehicleType = getStringInput("Enter Vehicle Type: ");
+        String color = getStringInput("Enter Vehicle Color: ");
+        int odometer = getIntInput("Enter Vehicle Mileage: ");
+        double price = getDoubleInput("Enter Vehicle Price: ");
+
+        dealership.addVehicle(new Vehicle(
+                vin, year, make, model, vehicleType, color, odometer, price
+        ));
+        DealershipFileManager dealershipFileManager = new DealershipFileManager();
+        dealershipFileManager.saveDealership(this.dealership);
+    }
+
+    private void processRemoveVehicleRequest() {
+        System.out.println("==========[ Remove Vehicle ]==========");
+        int vin = getIntInput("Enter Vehicle Vin: ");
+
+        System.out.println("Removing...");
+        List<Vehicle> vehicles = dealership.getVehiclesByVin(vin);
+        displayVehicles(vehicles);
+
+        if (vehicles.size() > 0) dealership.removeVehicle(vehicles.get(0));
+        else return; //if empty do nothing return
+
+        DealershipFileManager dealershipFileManager = new DealershipFileManager();
+        dealershipFileManager.saveDealership(this.dealership);
+    }
+
+    /*-----Helper Methods-----*/
     private void init() {
         DealershipFileManager dealershipFileManager = new DealershipFileManager();
         this.dealership = dealershipFileManager.getDealership();
@@ -71,6 +122,12 @@ public class UserInterface {
         System.out.print("""
                 ==========[ Main Menu ]==========
                   (D) - Display All Vehicles
+                  (P) - Display Vehicles By Price
+                  (M) - Display Vehicles By Make and Model
+                  (Y) - Display Vehicles By Year
+                  (C) - Display Vehicles By Color
+                  (T) - Display Vehicles By Type
+                  (O) - Display Vehicles By Mileage
                   (X) - Exit The Application
                 """);
     }
@@ -82,8 +139,39 @@ public class UserInterface {
         System.out.println(); //formatting
     }
 
-    private char getCharInput(String prompt) {
+    /*-----I/O Methods-----*/
+    private String getStringInput(String prompt) {
         System.out.print(prompt);
-        return scanner.nextLine().toUpperCase().charAt(0);
+        return scanner.nextLine();
+    }
+
+    private char getCharInput(String prompt) {
+        return getStringInput(prompt).toUpperCase().charAt(0);
+    }
+
+    private int getIntInput(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                int input = scanner.nextInt();
+                scanner.nextLine();
+                return input;
+            } catch (InputMismatchException e) {
+                System.out.println("Was Expecting An Integer. Try Again");
+            }
+        }
+    }
+
+    private double getDoubleInput(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                double input = scanner.nextDouble();
+                scanner.nextLine();
+                return input;
+            } catch (InputMismatchException e) {
+                System.out.println("Was Expecting An Integer. Try Again");
+            }
+        }
     }
 }
