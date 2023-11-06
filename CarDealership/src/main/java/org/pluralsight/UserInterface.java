@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UserInterface {
-    Dealership dealership;
-    Scanner scanner = new Scanner(System.in);
+    private Dealership dealership;
+    private Scanner scanner = new Scanner(System.in);
 
     public UserInterface() {
 
@@ -68,7 +68,7 @@ public class UserInterface {
     }
 
     private void displayMenu() {
-        System.out.println("""
+        System.out.print("""
                 ==========[ Main Menu ]==========
                   (D) - Display All Vehicles
                   (X) - Exit The Application
@@ -79,6 +79,7 @@ public class UserInterface {
         for (Vehicle vehicle : vehicles) {
             System.out.println(vehicle.toString());
         }
+        System.out.println(); //formatting
     }
 
     private char getCharInput(String prompt) {
