@@ -21,11 +21,6 @@ class DealershipFileManagerTest {
 
     @Test
     void saveDealership() {
-        //add a vehicle to it
-        dealership.addVehicle(new Vehicle(
-                12345, 2020,"Ford", "Raptor", "Car", "Black", 20, 34000
-        ));
-
         //save dealership
         fileManager.saveDealership(dealership);
 
