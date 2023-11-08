@@ -28,6 +28,7 @@ public class UserInterface {
                 case 'O' -> processGetByMileage();
                 case 'A' -> processAddVehicleRequest();
                 case 'R' -> processRemoveVehicleRequest();
+                case 'S' -> processSellOrLeaseVehicle();
                 case 'X' -> { return; }
                 default -> System.out.println("Not A Valid Command, Try Again");
             }
@@ -112,6 +113,10 @@ public class UserInterface {
         dealershipFileManager.saveDealership(this.dealership);
     }
 
+    private void processSellOrLeaseVehicle() {
+
+    }
+
     /*-----Helper Methods-----*/
     private void init() {
         DealershipFileManager dealershipFileManager = new DealershipFileManager();
@@ -128,6 +133,7 @@ public class UserInterface {
                   (C) - Display Vehicles By Color
                   (T) - Display Vehicles By Type
                   (O) - Display Vehicles By Mileage
+                  (S) - Sell/Lease A Vehicle
                   (X) - Exit The Application
                 """);
     }
