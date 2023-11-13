@@ -26,11 +26,26 @@ public class SalesContract extends Contract{
 
     @Override
     public double getTotalPrice() {
-        return 0;
+        double fees = (getVehicle().getPrice() * (1 + tax)) + recordingFee + processingFee;
+
+        return isFinanced ? (getMonthlyPayment() * loanTermInMonths) + fees :
+                getVehicle().getPrice() + fees;
     }
 
     @Override
     public double getMonthlyPayment() {
-        return 0;
+        if(!isFinanced) return 0;
+        //p = a(r / 12);
+        return getVehicle().getPrice() * (loanInterestRate / 12);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder("SALE|");
+        stringBuilder.append(getDate()).append("|");
+        stringBuilder.append(getName()).append("|");
+        stringBuilder.append(getEmail()).append("|");
+        stringBuilder.append(getVehicle().toString());
+        return stringBuilder.toString();
     }
 }

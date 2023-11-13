@@ -3,6 +3,7 @@ package org.pluralsight;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.SortedMap;
 
 public class UserInterface {
     private Dealership dealership;
@@ -114,7 +115,28 @@ public class UserInterface {
     }
 
     private void processSellOrLeaseVehicle() {
+        System.out.println("==========[ Contract Menu ]==========");
+        String date = getStringInput("Enter Current Date: ");
+        String name = getStringInput("Enter Your Name: ");
+        String email = getStringInput("Enter Your Email: ");
+        int vin = getIntInput("Enter Vin Of Vehicle: ");
+        List<Vehicle> vehicle = dealership.getVehiclesByVin(vin);
 
+        String typeOfContract = getStringInput("Would you like to buy or lease").toUpperCase();
+        Contract contract = null;
+        if (typeOfContract.equalsIgnoreCase("LEASE")) {
+            contract = new LeaseContract(date, name, email, vehicle.get(0));
+        } else if(typeOfContract.equalsIgnoreCase("BUY")) {
+            boolean isFinanced = getBooleanInput("Would you like to finance the vehicle?");
+            contract = new SalesContract(date, name, email, vehicle.get(0), isFinanced);
+        }
+
+        ContractDataManager contractDataManager = new ContractDataManager();
+        contractDataManager.saveContract(contract);
+        dealership.removeVehicle(vehicle.get(0));
+
+        DealershipFileManager dealershipFileManager = new DealershipFileManager();
+        dealershipFileManager.saveDealership(dealership);
     }
 
     /*-----Helper Methods-----*/
@@ -177,6 +199,19 @@ public class UserInterface {
                 return input;
             } catch (InputMismatchException e) {
                 System.out.println("Was Expecting An Integer. Try Again");
+            }
+        }
+    }
+
+    private boolean getBooleanInput(String prompt) {
+        while (true) {
+            System.out.println(prompt);
+            try {
+                boolean input = scanner.nextBoolean();
+                scanner.nextLine();
+                return input;
+            } catch (InputMismatchException e) {
+                System.out.println("Was Expecting true or false. Try Again");
             }
         }
     }
